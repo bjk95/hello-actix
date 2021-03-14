@@ -1,5 +1,5 @@
-use actix_web::{get, Responder};
 use actix_web::HttpResponse;
+use actix_web::{get, Responder};
 use serde::{Deserialize, Serialize};
 
 #[derive(Debug, Deserialize, Serialize, PartialEq)]
@@ -20,7 +20,5 @@ fn get_health() -> HealthResponse {
 pub async fn health_check() -> impl Responder {
     let res: HealthResponse = get_health();
 
-    HttpResponse::Ok()
-        .json(res)
+    HttpResponse::Ok().json(res)
 }
-

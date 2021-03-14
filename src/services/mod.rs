@@ -1,2 +1,2 @@
-pub mod search;
 pub mod health_check;
+pub mod search;
