@@ -24,21 +24,26 @@ pub async fn cat_indices() -> Result<Response, Error> {
         response
 }
 
-pub async fn simple_search(term: &String, number_of_results: &i64, index: &String) -> String {
+pub async fn simple_search(term: &String, query_number_of_results: Option<i64>, index: &String) -> String {
+    let number_of_results: i64 = match query_number_of_results {
+        Some(n) => n,
+        None => 10
+    };
+
     let response: Response = create_client()
-    .search(SearchParts::Index(&[index]))
-    .from(0)
-    .size(number_of_results)
-    .body(json!({
-        "query": {
-          "query_string": {
-            "query": term
-          }
-        }
-      }))
-    .send()
-    .await
-    .unwrap();
+        .search(SearchParts::Index(&[index]))
+        .from(0)
+        .size(number_of_results)
+        .body(json!({
+            "query": {
+            "query_string": {
+                "query": term
+            }
+            }
+        }))
+        .send()
+        .await
+        .unwrap();
 
     response.text().await.unwrap()
 }
